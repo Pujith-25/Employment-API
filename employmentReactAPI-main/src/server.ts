@@ -1,8 +1,9 @@
 import app from "./app";
 import prisma from "./config/prisma";
 import "dotenv/config";
+
 import swaggerUi from "swagger-ui-express";
-import YAML from "yamljs";
+import swaggerDocument from "./docs/swagger";
 
 async function testDB() {
   try {
@@ -23,9 +24,6 @@ async function testDB() {
 }
 
 testDB();
-
-const swaggerDocument =
-  YAML.load("./swagger.yaml");
 
 app.use(
   "/api-docs",

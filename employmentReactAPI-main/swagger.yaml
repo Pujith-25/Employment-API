@@ -1,65 +1,12 @@
 openapi: 3.0.0
-
 info:
 title: Employee Management API
 version: 1.0.0
-description: Employee Management System
-
-servers:
-
-* url: http://localhost:3000
 
 paths:
-
-/auth/login:
-post:
-summary: Login User
-
-  requestBody:
-    required: true
-
-    content:
-      application/json:
-        schema:
-          type: object
-
-          properties:
-            email:
-              type: string
-
-            password:
-              type: string
-
-  responses:
-    '200':
-      description: Login Successful
-
-
-/users:
+/test:
 get:
-summary: Get All Users
-
-
-  responses:
-    '200':
-      description: Users Retrieved Successfully
-
-/departments:
-get:
-summary: Get All Departments
-
-
-  responses:
-    '200':
-      description: Departments Retrieved Successfully
-
-
-/employees:
-get:
-summary: Get All Employees
-
-
-  responses:
-    '200':
-      description: Employees Retrieved Successfully
-
+summary: Test endpoint
+responses:
+'200':
+description: Success
