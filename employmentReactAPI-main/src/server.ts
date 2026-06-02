@@ -1,6 +1,8 @@
 import app from "./app";
 import prisma from "./config/prisma";
 import "dotenv/config";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 
 async function testDB() {
   try {
@@ -21,6 +23,15 @@ async function testDB() {
 }
 
 testDB();
+
+const swaggerDocument =
+  YAML.load("./swagger.yaml");
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 app.get("/", (req, res) => {
   res.send("Employee Management API");
