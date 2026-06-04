@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+  users User[]
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  password     String
+  refreshToken String?
+
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  fullName  String
+  phone     String   @unique
+  city      String
+
+  orders    Order[]
+  services  CustomerService[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Salesman {
+  id        Int      @id @default(autoincrement())
+  fullName  String
+
+  orders    Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Car {
+  id        Int      @id @default(autoincrement())
+
+  brand     String
+  model     String
+
+  price     Int
+  stock     Int      @default(0)
+
+  orders    Order[]
+  services  CustomerService[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id          Int      @id @default(autoincrement())
+
+  customerId  Int
+  salesmanId  Int
+  carId       Int
+
+  quantity    Int
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  salesman Salesman @relation(fields: [salesmanId], references: [id])
+  car      Car      @relation(fields: [carId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CustomerService {
+  customerId Int
+  carId      Int
+
+  serviceDate DateTime
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  car      Car      @relation(fields: [carId], references: [id])
+
+  @@id([customerId, carId])
+}
