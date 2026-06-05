@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import { loginUser }
 from "../services/auth.service";
 
@@ -149,7 +149,26 @@ const LoginPage = () => {
         >
           Login
         </button>
+<div className="mt-4">
 
+  <Link
+    to="/forgot-password"
+    className="
+    text-blue-600"
+  >
+    Forgot Password?
+  </Link>
+</div>
+<div className="mt-4">
+
+  <Link
+    to="/reset-password"
+    className="
+    text-blue-600"
+  >
+    Reset Password?
+  </Link>
+</div>
       </form>
     </div>
   );

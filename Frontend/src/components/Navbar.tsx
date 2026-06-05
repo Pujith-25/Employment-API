@@ -54,6 +54,10 @@ const Navbar = () => {
     <Link to="/admin/orders">
       Orders
     </Link>
+
+    <Link to="/change-password">
+  Change Password
+</Link>
   </>
 )}
 
@@ -70,10 +74,16 @@ const Navbar = () => {
     <Link to="/manager/cars">
       Cars
     </Link>
+    <Link to="/manager/salesmen">
+      Salesmen
+    </Link>
 
     <Link to="/manager/orders">
       Orders
     </Link>
+    <Link to="/change-password">
+  Change Password
+</Link>
   </>
 )}
         {role === "SALESMAN" && (
@@ -89,6 +99,9 @@ const Navbar = () => {
     <Link to="/salesman/profile">
       Profile
     </Link>
+    <Link to="/change-password">
+  Change Password
+</Link>
   </>
 )}
 

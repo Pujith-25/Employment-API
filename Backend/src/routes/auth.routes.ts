@@ -4,7 +4,10 @@ import {
 register,
 login,
 refreshAccessToken,
-logout
+logout,
+forgotPassword,
+resetPassword,
+changePassword
 } from "../controllers/auth.controller";
 
 import {
@@ -32,6 +35,22 @@ router.post(
 "/logout",
 authenticate,
 logout
+);
+
+router.post(
+  "/forgot-password",
+  forgotPassword
+);
+
+router.post(
+  "/reset-password",
+  resetPassword
+);
+
+router.post(
+  "/change-password",
+  authenticate,
+  changePassword
 );
 
 export default router;

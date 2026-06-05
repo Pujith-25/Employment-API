@@ -22,7 +22,8 @@ router.post(
   "/",
   authenticate,
   authorizeRole(
-    "ADMIN"
+    "ADMIN",
+    "MANAGER"
   ),
   createSalesman
 );
@@ -51,7 +52,8 @@ router.put(
   "/:id",
   authenticate,
   authorizeRole(
-    "ADMIN"
+    "ADMIN",
+    "MANAGER"
   ),
   updateSalesman
 );

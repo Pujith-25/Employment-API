@@ -5,6 +5,7 @@ export const createOrder = async (
   req: Request,
   res: Response
 ) => {
+
   try {
 
     const {
@@ -13,6 +14,17 @@ export const createOrder = async (
       carId,
       quantity
     } = req.body;
+
+    if (
+      !customerId ||
+      !carId ||
+      !quantity
+    ) {
+      return res.status(400).json({
+        message:
+          "All fields required"
+      });
+    }
 
     const order =
       await prisma.order.create({
@@ -40,6 +52,7 @@ export const createOrder = async (
     });
 
   }
+
 };
 
 export const getOrders = async (

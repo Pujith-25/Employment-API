@@ -32,7 +32,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.send("Employee Management API");
+  res.send("Car Sales API");
 });
 
 app.listen(3000, () => {

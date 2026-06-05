@@ -22,6 +22,9 @@ import {
 
 const OrdersPage = () => {
 
+  const role =
+    localStorage.getItem("role");
+
   const [orders, setOrders] =
     useState<any[]>([]);
 
@@ -49,46 +52,96 @@ const OrdersPage = () => {
   const loadData =
     async () => {
 
-      const orderData =
-        await getOrders();
+      try {
 
-      const customerData =
-        await getCustomersForDropdown();
+        const orderData =
+          await getOrders();
 
-      const salesmanData =
-        await getSalesmenForDropdown();
+        const customerData =
+          await getCustomersForDropdown();
 
-      const carData =
-        await getCarsForDropdown();
+        const carData =
+          await getCarsForDropdown();
 
-      setOrders(orderData);
-      setCustomers(customerData);
-      setSalesmen(salesmanData);
-      setCars(carData);
+        setOrders(orderData);
+        setCustomers(customerData);
+        setCars(carData);
+
+        if (
+          role === "ADMIN" ||
+          role === "MANAGER"
+        ) {
+
+          const salesmanData =
+            await getSalesmenForDropdown();
+
+          setSalesmen(
+            salesmanData
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
     };
 
   useEffect(() => {
+
     loadData();
+
   }, []);
 
   const handleAdd =
     async () => {
 
-      await createOrder({
-        customerId:
-          Number(customerId),
+      try {
 
-        salesmanId:
-          Number(salesmanId),
+        if (
+          !customerId ||
+          !carId ||
+          !quantity
+        ) {
 
-        carId:
-          Number(carId),
+          alert(
+            "Please fill all fields"
+          );
 
-        quantity:
-          Number(quantity)
-      });
+          return;
+        }
 
-      loadData();
+        await createOrder({
+
+          customerId:
+            Number(customerId),
+
+          salesmanId:
+            Number(salesmanId),
+
+          carId:
+            Number(carId),
+
+          quantity:
+            Number(quantity)
+
+        });
+
+        setCustomerId("");
+        setSalesmanId("");
+        setCarId("");
+        setQuantity("");
+
+        loadData();
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
     };
 
   const handleDelete =
@@ -96,12 +149,22 @@ const OrdersPage = () => {
       id: number
     ) => {
 
-      await deleteOrder(id);
+      try {
 
-      loadData();
+        await deleteOrder(id);
+
+        loadData();
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
     };
 
   return (
+
     <>
       <Navbar />
 
@@ -120,7 +183,8 @@ const OrdersPage = () => {
           className="
           flex
           gap-2
-          mb-6"
+          mb-6
+          flex-wrap"
         >
 
           <select
@@ -130,50 +194,66 @@ const OrdersPage = () => {
                 e.target.value
               )
             }
+            className="
+            border
+            p-2"
           >
 
-            <option>
+            <option value="">
               Customer
             </option>
 
             {customers.map(
               (customer) => (
+
                 <option
                   key={customer.id}
                   value={customer.id}
                 >
                   {customer.fullName}
                 </option>
+
               )
             )}
 
           </select>
 
-          <select
-            value={salesmanId}
-            onChange={(e) =>
-              setSalesmanId(
-                e.target.value
-              )
-            }
-          >
+          {
+            role !== "SALESMAN" && (
 
-            <option>
-              Salesman
-            </option>
+              <select
+                value={salesmanId}
+                onChange={(e) =>
+                  setSalesmanId(
+                    e.target.value
+                  )
+                }
+                className="
+                border
+                p-2"
+              >
 
-            {salesmen.map(
-              (salesman) => (
-                <option
-                  key={salesman.id}
-                  value={salesman.id}
-                >
-                  {salesman.fullName}
+                <option value="">
+                  Salesman
                 </option>
-              )
-            )}
 
-          </select>
+                {salesmen.map(
+                  (salesman) => (
+
+                    <option
+                      key={salesman.id}
+                      value={salesman.id}
+                    >
+                      {salesman.fullName}
+                    </option>
+
+                  )
+                )}
+
+              </select>
+
+            )
+          }
 
           <select
             value={carId}
@@ -182,14 +262,18 @@ const OrdersPage = () => {
                 e.target.value
               )
             }
+            className="
+            border
+            p-2"
           >
 
-            <option>
+            <option value="">
               Car
             </option>
 
             {cars.map(
               (car) => (
+
                 <option
                   key={car.id}
                   value={car.id}
@@ -198,12 +282,14 @@ const OrdersPage = () => {
                   {" "}
                   {car.model}
                 </option>
+
               )
             )}
 
           </select>
 
           <input
+            type="number"
             placeholder="Quantity"
             value={quantity}
             onChange={(e) =>
@@ -211,10 +297,18 @@ const OrdersPage = () => {
                 e.target.value
               )
             }
+            className="
+            border
+            p-2"
           />
 
           <button
             onClick={handleAdd}
+            className="
+            bg-blue-600
+            text-white
+            px-4
+            py-2"
           >
             Add
           </button>
@@ -251,6 +345,7 @@ const OrdersPage = () => {
 
             {orders.map(
               (order) => (
+
                 <tr
                   key={order.id}
                 >
@@ -260,17 +355,17 @@ const OrdersPage = () => {
                   </td>
 
                   <td>
-                    {order.customer.fullName}
+                    {order.customer?.fullName}
                   </td>
 
                   <td>
-                    {order.salesman.fullName}
+                    {order.salesman?.fullName}
                   </td>
 
                   <td>
-                    {order.car.brand}
+                    {order.car?.brand}
                     {" "}
-                    {order.car.model}
+                    {order.car?.model}
                   </td>
 
                   <td>
@@ -279,19 +374,31 @@ const OrdersPage = () => {
 
                   <td>
 
-                    <button
-                      onClick={() =>
-                        handleDelete(
-                          order.id
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
+                    {
+                      role === "ADMIN" && (
+
+                        <button
+                          onClick={() =>
+                            handleDelete(
+                              order.id
+                            )
+                          }
+                          className="
+                          bg-red-600
+                          text-white
+                          px-3
+                          py-1"
+                        >
+                          Delete
+                        </button>
+
+                      )
+                    }
 
                   </td>
 
                 </tr>
+
               )
             )}
 
@@ -300,8 +407,10 @@ const OrdersPage = () => {
         </table>
 
       </div>
+
     </>
   );
+
 };
 
 export default OrdersPage;

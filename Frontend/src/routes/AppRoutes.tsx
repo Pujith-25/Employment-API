@@ -4,22 +4,19 @@ import {
 } from "react-router-dom";
 
 import LoginPage from "../pages/LoginPage";
-
 import AdminDashboard from "../pages/AdminDashboard";
 import ManagerDashboard from "../pages/ManagerDashboard";
 import SalesmanDashboard from "../pages/SalesmanDashboard";
-
 import CustomersPage from "../pages/CustomersPage";
 import CarsPage from "../pages/CarsPage";
 import SalesmenPage from "../pages/SalesmenPage";
 import OrdersPage from "../pages/OrdersPage";
-
 import ProtectedRoute from "../components/ProtectedRoute";
-import ProfilePage
-from "../pages/ProfilePage";
-
-import MyOrdersPage
-from "../pages/MyOrdersPage";
+import ProfilePage from "../pages/ProfilePage";
+import MyOrdersPage from "../pages/MyOrdersPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
+import ChangePasswordPage from "../pages/changePasswordPage";
 
 const AppRoutes = () => {
 
@@ -30,7 +27,25 @@ const AppRoutes = () => {
         path="/"
         element={<LoginPage />}
       />
+<Route
+  path="/forgot-password"
+  element={
+    <ForgotPasswordPage />
+  }
+/>
 
+<Route
+  path="/reset-password"
+  element={
+    <ResetPasswordPage />
+  }
+/>
+<Route
+  path="/change-password"
+  element={
+    <ChangePasswordPage />
+  }
+/>
       {/* ADMIN */}
 
       <Route
@@ -128,6 +143,19 @@ const AppRoutes = () => {
             ]}
           >
             <CarsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/manager/salesmen"
+        element={
+          <ProtectedRoute
+            allowedRoles={[
+              "ADMIN",
+              "MANAGER"
+            ]}
+          >
+            <SalesmenPage />
           </ProtectedRoute>
         }
       />

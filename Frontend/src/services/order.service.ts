@@ -27,7 +27,7 @@ export const createOrder =
   async (
     order: {
       customerId: number;
-      salesmanId: number;
+      salesmanId?: number;
       carId: number;
       quantity: number;
     }
@@ -45,7 +45,6 @@ export const createOrder =
 
     return response.data;
   };
-
 export const deleteOrder =
   async (
     id: number

@@ -20,6 +20,8 @@ model User {
   password     String
   refreshToken String?
 
+  resetToken   String?
+
   roleId Int
   role   Role @relation(fields: [roleId], references: [id])
 
